@@ -76,6 +76,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Event.cs" />
     <Compile Include="TaskWrappers\CreateStreamCompletionWrapper.cs" />
     <Compile Include="TaskWrappers\ProcessResultStatus.cs" />
     <Compile Include="Common\Log\Logger.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Transport.Tcp\TcpConnection.cs" />
     <Compile Include="Transport.Tcp\LengthPrefixFramer.cs" />
     <Compile Include="Transport.Tcp\TcpConnectionMonitor.cs" />
+    <Compile Include="Transport.Tcp\TcpStats.cs" />
     <Compile Include="Transport.Tcp\TcpTypedConnection.cs" />
     <Compile Include="EventStoreConnection.cs" />
     <Compile Include="EventStore.cs" />

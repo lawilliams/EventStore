@@ -31,8 +31,9 @@ using System.Threading.Tasks;
 using EventStore.ClientAPI.Defines;
 using EventStore.ClientAPI.Messages;
 using EventStore.ClientAPI.Tcp;
+using EventStore.ClientAPI.Transport.Tcp;
 
-namespace EventStore.ClientAPI.Commands
+namespace EventStore.ClientAPI.TaskWrappers
 {
     class ReadFromBeginningTaskCompletionWrapper : ITaskCompletionWrapper
     {

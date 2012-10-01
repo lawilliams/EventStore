@@ -32,7 +32,8 @@ using EventStore.ClientAPI.Defines;
 
 namespace EventStore.ClientAPI.Data
 {
-    //TODO GFY this should not be exposed
+    //TODO GFY is this really what we want to expose to the world as an event through the API?
+    //What does expected version mean here?
     public class EventRecord : IEquatable<EventRecord>
     {
         public static readonly byte[] Empty = new byte[0];

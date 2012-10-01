@@ -1,4 +1,4 @@
-// Copyright (c) 2012, Event Store Ltd
+﻿// Copyright (c) 2012, Event Store LLP
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -10,7 +10,7 @@
 // Redistributions in binary form must reproduce the above copyright
 // notice, this list of conditions and the following disclaimer in the
 // documentation and/or other materials provided with the distribution.
-// Neither the name of the Event Store Ltd nor the names of its
+// Neither the name of the Event Store LLP nor the names of its
 // contributors may be used to endorse or promote products derived from
 // this software without specific prior written permission
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -24,28 +24,40 @@
 // THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-using System.Linq;
+//  
+using System;
+using System.Diagnostics;
 
-namespace EventStore.TestClient.Commands
+namespace EventStore.Common.Utils
 {
-    internal class UsageProcessor : ICmdProcessor
+    public class HostName
     {
-        public string Keyword { get { return "USAGE"; } }
-        public string Usage { get { return "USAGE"; } }
-
-        private readonly CommandsProcessor _commands;
-
-        public UsageProcessor(CommandsProcessor commands)
+        public static string Combine(string hostName, string relativeUri, params object[] arg)
         {
-            _commands = commands;
+            try
+            {
+                return CombineHostNameAndPath(hostName, relativeUri, arg);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Failed to combine hostname with relative path: {0}", e.Message);
+                return hostName;
+            }
         }
 
-        public bool Execute(CommandProcessorContext context, string[] args)
+        private static string CombineHostNameAndPath(string hostName,
+                                                     string relativeUri,
+                                                     object[] arg)
         {
-            var allCommands = string.Join("\n\n", _commands.RegisteredProcessors.Select(x => x.Usage.ToUpper()));
-            context.Log.Info("Available commands:\n{0}", allCommands);
-            return true;
+            var path = string.Format(relativeUri, arg);
+
+            if (hostName.Contains(":"))
+            {
+                var parts = hostName.Split(new[] {":"}, StringSplitOptions.RemoveEmptyEntries);
+                return new Uri(new UriBuilder(Uri.UriSchemeHttp, parts[0], Int32.Parse(parts[1])).Uri, path).ToString();
+            }
+
+            return new Uri(new UriBuilder(Uri.UriSchemeHttp, hostName).Uri, path).ToString();
         }
     }
 }
